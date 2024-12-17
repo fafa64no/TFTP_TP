@@ -2,11 +2,6 @@
 
 src="
 src/main.c
-src/defaultMsg.c
-src/commandReader.c
-src/redirection.c
-src/checkManyThings.c
-src/commandExec.c
 "
 
 includes="
@@ -14,7 +9,7 @@ includes="
 -Isrc
 "
 
-output="-oENSEA_SHELL.exe"
+output="-oTFTP_TP.exe"
 args="-g"
 
 gcc $args $includes $src $output
