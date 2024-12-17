@@ -10,6 +10,11 @@
 #include <string.h>
 #include <stdlib.h>
 
-int getAddrCfg(int argc, char** argv);
+#define MAX_MSG_LENGTH 1024
+
+struct addrinfo getAddrCfg(int argc, char** argv);
 
 void checkArgs(int argc, char** argv);
+void checkAddrInfoRet(int ret);
+
+void dispAddrInfo(struct addrinfo* addrinfo);
