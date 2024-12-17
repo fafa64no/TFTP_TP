@@ -1,15 +1,22 @@
 #!/bin/bash
 
-src="
-src/main.c
+src1="
+src/gettftp.c
+src/tftp_cfg.c
+"
+src2="
+src/puttftp.c
+src/tftp_cfg.c
 "
 
+output1="-ogettftp.exe"
+output2="-oputtftp.exe"
+
+args="-g"
 includes="
 -Iinclude 
 -Isrc
 "
 
-output="-oTFTP_TP.exe"
-args="-g"
-
-gcc $args $includes $src $output
+gcc $args $includes $src1 $output1
+gcc $args $includes $src2 $output2
