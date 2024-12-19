@@ -57,7 +57,7 @@ void sendACK(int source, struct addrinfo* dest, unsigned short block) {
     free(ackBuffer);
 }
 
-int receivePacket(char* output, ssize_t* outputSize, int source, struct addrinfo* dest) {
+void receivePacket(char* output, ssize_t* outputSize, int source, struct addrinfo* dest) {
     socklen_t sourceAddressSize = dest->ai_addrlen;
     *outputSize = recvfrom(
         source,
@@ -74,7 +74,6 @@ int receivePacket(char* output, ssize_t* outputSize, int source, struct addrinfo
         write(STDOUT_FILENO,errorMsg,strlen(errorMsg));
         exit(EXIT_FAILURE);
     }
-    return sourceAddressSize;
 }
 
 void readSocket(int source, struct addrinfo* dest,  char* filename) {
@@ -85,14 +84,13 @@ void readSocket(int source, struct addrinfo* dest,  char* filename) {
 
     char* rcvBuffer = (char*) malloc(MAX_PACKET_SIZE * MAX_PACKET_AMOUNT * sizeof(char));
     ssize_t retRcv, rcvBufferSize = 0;
-    socklen_t wtfIsThis;
-    int currBlock = 0;
 
-    do {
-        wtfIsThis = receivePacket(&rcvBuffer[rcvBufferSize], &retRcv, source, dest);
+    for (int currBlock = 0; currBlock < MAX_PACKET_AMOUNT; currBlock++) {
+        receivePacket(&rcvBuffer[rcvBufferSize], &retRcv, source, dest);
         rcvBufferSize += retRcv;
-        sendACK(source, dest, ++currBlock);
-    } while (retRcv == MAX_PACKET_SIZE);
+        sendACK(source, dest, currBlock + 1);
+        if (retRcv != MAX_PACKET_SIZE) break;
+    }
 
     write(STDOUT_FILENO,rcvBuffer,rcvBufferSize);
     write(STDOUT_FILENO,"\n",strlen("\n"));

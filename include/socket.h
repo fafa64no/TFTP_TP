@@ -24,6 +24,6 @@ void checkSocket(int sock);
 
 void sendRequest_RRQ(int source, struct addrinfo* dest,  char* filename);
 void sendACK(int source, struct addrinfo* dest, unsigned short block);
-int receivePacket(char* output, ssize_t* outputSize, int source, struct addrinfo* dest);
+void receivePacket(char* output, ssize_t* outputSize, int source, struct addrinfo* dest);
 
 void readSocket(int source, struct addrinfo* dest, char* filename);
