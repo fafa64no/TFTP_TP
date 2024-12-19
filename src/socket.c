@@ -153,7 +153,7 @@ void writeSocket(int source, struct addrinfo* dest, char* sourceFilename, char* 
         ssize_t packetSize = (i_packet == packetAmount) ? lastPacketSize : MAX_PACKET_SIZE;
         while(receiveACK(source, dest) != i_packet) {
             sendData(&sourceFile[(i_packet - 1) * MAX_PACKET_SIZE], packetSize, source, dest, i_packet);
-        }  
+        }
     }
 }
 
@@ -163,8 +163,6 @@ void sendData(char* input, ssize_t inputSize, int source, struct addrinfo* dest,
 
     unsigned int block1 = block/256;
     unsigned int block0 = block - (block/256);
-
-    printf("%d | %d\n",block1,block0);
 
     dataBuffer[0] = 0;
     dataBuffer[1] = OPCODE_DATA;
