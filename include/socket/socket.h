@@ -10,3 +10,5 @@ int getSocket();
 
 void readSocket(int source, struct addrinfo* dest, char* filename);
 void writeSocket(int source, struct addrinfo* dest, char* sourceFilename, char* destFilename);
+
+int receiveACK_2(int source, struct addrinfo* dest);

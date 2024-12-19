@@ -59,30 +59,3 @@ unsigned int receiveACK(int source, struct addrinfo* dest) {
     }
     return block;
 }
-
-int receiveACK_2(int source, struct addrinfo* dest) {
-    char packetReceived[MAX_PACKET_SIZE] = {0};
-    ssize_t packetReceivedSize;
-
-    receivePacket(&packetReceived[0], &packetReceivedSize, source, dest);
-    if(packetReceivedSize < 4) {
-        const char errorMsg[] = "ERROR : Too small ACK\n";
-        write(STDOUT_FILENO,errorMsg,strlen(errorMsg));
-        exit(EXIT_FAILURE);
-    }
-    int opcode = packetReceived[1] + 256 * packetReceived[0];
-
-    switch (opcode) {
-    case OPCODE_ERROR:
-        write(STDOUT_FILENO, packetReceived, packetReceivedSize);
-        exit(EXIT_FAILURE);
-    case OPCODE_ACK:
-        return packetReceived[3] + 256 * packetReceived[2];
-    default:
-        const char errorMsg[] = "ERROR : Unknown opcode\n";
-        write(STDOUT_FILENO,errorMsg,strlen(errorMsg));
-        exit(EXIT_FAILURE);
-    }
-
-    return -1;
-}
