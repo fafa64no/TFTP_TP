@@ -1,13 +1,13 @@
 #include "puttftp.h"
 
 int main(int argc, char** argv) {
-    struct addrinfo hostCfg = getAddrCfg(argc, argv);
-    struct sockaddr* sockaddr = hostCfg.ai_addr;
-    //sockaddr->
-
-    int sock = getSocket();
+    struct addrinfo dest = getAddrCfg(argc, argv);
+    int source = getSocket();
     
-    char* filename = argv[2];
+    char sourceFilename[] = "data/gringo.txt";
+    char* destFilename = argv[2];
+
+    writeSocket(source, &dest, &sourceFilename[0], destFilename);
 
     return EXIT_SUCCESS;
 }

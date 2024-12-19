@@ -1,12 +1,12 @@
 #include "gettftp.h"
 
 int main(int argc, char** argv) {
-    struct addrinfo hostCfg = getAddrCfg(argc, argv);
+    struct addrinfo dest = getAddrCfg(argc, argv);
+    int source = getSocket();
 
-    int sock = getSocket();
     char* filename = argv[2];
 
-    readSocket(sock, &hostCfg, filename);
+    readSocket(source, &dest, filename);
 
     return EXIT_SUCCESS;
 }
