@@ -16,7 +16,7 @@ ssize_t getRequestSize(char* filename) {
 char* getRequest(char* filename, unsigned short opcode) {
     char* mode = getRequestMode();
     ssize_t requestSize = getRequestSize(filename);
-    char* requestBuffer = (char*) malloc(requestSize + sizeof(char));
+    char* requestBuffer = (char*) malloc(requestSize);
 
     int pos=0;
     requestBuffer[pos++]=0;

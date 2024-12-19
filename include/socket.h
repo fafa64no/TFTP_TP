@@ -17,9 +17,13 @@
 
 #define MAX_MSG_LENGTH 1024
 #define MAX_PACKET_SIZE 512
+#define MAX_PACKET_AMOUNT 1024
 
 int getSocket();
 void checkSocket(int sock);
 
 void sendRequest_RRQ(int source, struct addrinfo* dest,  char* filename);
+void sendACK(int source, struct addrinfo* dest, unsigned short block);
+int receivePacket(char* output, ssize_t* outputSize, int source, struct addrinfo* dest);
+
 void readSocket(int source, struct addrinfo* dest, char* filename);
