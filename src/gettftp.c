@@ -2,13 +2,13 @@
 
 int main(int argc, char** argv) {
     struct addrinfo hostCfg = getAddrCfg(argc, argv);
-    struct sockaddr* sockaddr = hostCfg.ai_addr;
+    ssize_t socklen = hostCfg.ai_addrlen;
+    struct sockaddr_in* dest_sock = getSockaddr(hostCfg);
 
     int sock = getSocket();
-    
     char* filename = argv[2];
 
-    while(1);
+    readSocket(sock, dest_sock, socklen, filename);
 
     return EXIT_SUCCESS;
 }

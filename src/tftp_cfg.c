@@ -17,6 +17,14 @@ struct addrinfo getAddrCfg(int argc, char** argv) {
     return res[0];
 }
 
+struct sockaddr_in* getSockaddr(struct addrinfo addrinf) {
+    struct sockaddr* saddr = addrinf.ai_addr;
+    struct sockaddr_in* saddr_in = (struct sockaddr_in*)saddr;
+
+    saddr_in->sin_port = DEFAULT_PORT;
+    return saddr_in;
+}
+
 void checkArgs(int argc, char** argv) {
     if (argc != 3) {
         const char errorMsg[] = "ERROR : Wrong arg count \n\tRequires two args \"host\" and \"file\"\n";
@@ -35,6 +43,8 @@ void checkAddrInfoRet(int ret) {
 }
 
 void dispAddrInfo(struct addrinfo* addrinfo) {
+    const char dispMsg[] = "Found sockets : \n";
+    write(STDOUT_FILENO,dispMsg,strlen(dispMsg));
     struct addrinfo* current = addrinfo;
     while(current != NULL) {
         char msg[MAX_MSG_LENGTH] = {0};
