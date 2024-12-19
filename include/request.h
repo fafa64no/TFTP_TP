@@ -12,9 +12,8 @@
 
 #include <errno.h>
 
-#include "request.h"
-
-int getSocket();
-void checkSocket(int sock);
-
-void readSocket(int source, struct sockaddr_in* dest, ssize_t destLen, char* filename);
+char* getRequestMode();
+ssize_t getRequestSize(char* filename);
+char* getRequest(char* filename, unsigned short opcode);
+char* getRequest_RRQ(char* filename);
+char* getRequest_WRQ(char* filename);

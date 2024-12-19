@@ -4,11 +4,13 @@ src1="
 src/gettftp.c
 src/tftp_cfg.c
 src/socket.c
+src/request.c
 "
 src2="
 src/puttftp.c
 src/tftp_cfg.c
 src/socket.c
+src/request.c
 "
 
 output1="-ogettftp.exe"
