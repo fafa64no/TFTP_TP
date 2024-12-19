@@ -1,6 +1,8 @@
 #include "gettftp.h"
 
 int main(int argc, char** argv) {
+    checkArgsGetTFTP(argc);
+    
     struct addrinfo dest = getAddrCfg(argc, argv);
     int source = getSocket();
 
