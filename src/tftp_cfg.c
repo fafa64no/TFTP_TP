@@ -6,23 +6,15 @@ struct addrinfo getAddrCfg(int argc, char** argv) {
     char* host = argv[1];
     char* filename = argv[2];
 
-    struct addrinfo hints = {0},* res, * current;
+    struct addrinfo hints = {0},* res,* current;
     hints.ai_protocol = IPPROTO_UDP;    // TFTP implies UDP
 
-    int ret = getaddrinfo(host, NULL, &hints, &res);
+    int ret = getaddrinfo(host, DEFAULT_PORT, &hints, &res);
     checkAddrInfoRet(ret);
 
     dispAddrInfo(res);
 
-    return res[0];
-}
-
-struct sockaddr_in* getSockaddr(struct addrinfo addrinf) {
-    struct sockaddr* saddr = addrinf.ai_addr;
-    struct sockaddr_in* saddr_in = (struct sockaddr_in*)saddr;
-
-    saddr_in->sin_port = DEFAULT_PORT;
-    return saddr_in;
+    return *res;
 }
 
 void checkArgs(int argc, char** argv) {

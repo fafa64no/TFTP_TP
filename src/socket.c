@@ -6,7 +6,7 @@ int getSocket() {
     return sock;
 }
 
-void readSocket(int source, struct sockaddr_in* dest, ssize_t destLen,  char* filename) {
+void sendRequest_RRQ(int source, struct addrinfo* dest,  char* filename) {
     ssize_t requestSize = getRequestSize(filename);
     char* requestBuffer = getRequest_RRQ(filename);
 
@@ -15,34 +15,44 @@ void readSocket(int source, struct sockaddr_in* dest, ssize_t destLen,  char* fi
         (const void*) requestBuffer,
         requestSize,
         0,      // flags
-        (const struct sockaddr*) dest,
-        destLen
+        (const struct sockaddr*) dest->ai_addr,
+        dest->ai_addrlen
     );
 
-    ssize_t fileSize = 128;
-    char* rcvBuffer = (char*) malloc(fileSize*sizeof(char));
-    socklen_t sourceAddressSize = destLen;
-    ssize_t retRcv = recvfrom(
+    if (retSnd < 0) {
+        char errorMsg[MAX_MSG_LENGTH] = {0};
+        sprintf(errorMsg,"ERROR : sendto() error :\t%d\n",errno);
+        write(STDOUT_FILENO,errorMsg,strlen(errorMsg));
+        exit(EXIT_FAILURE);
+    }
+}
+
+void readSocket(int source, struct addrinfo* dest,  char* filename) {
+    ssize_t requestSize = getRequestSize(filename);
+    char* requestBuffer = getRequest_RRQ(filename);
+
+    sendRequest_RRQ(source, dest, filename);
+
+    char* rcvBuffer = (char*) malloc(MAX_PACKET_SIZE * sizeof(char));
+    socklen_t sourceAddressSize = dest->ai_addrlen;
+    ssize_t retRcv;
+    retRcv = recvfrom(
         source,
-        (void*) rcvBuffer,
-        fileSize,
+        rcvBuffer,
+        MAX_PACKET_SIZE,
         0,      // flags
-        (struct sockaddr*) dest,
+        (struct sockaddr*) dest->ai_addr,
         &sourceAddressSize
     );
 
-    printf("\nTest : %s"
-        "\n\tsource = %d"
-        "\n\terrno = %d"
-        "\n\tretSnd = %ld"
-        "\n\tretRcv = %ld"
-        "\n",
-        rcvBuffer,
-        source,
-        errno,
-        retSnd,
-        retRcv
-    );
+    if (retRcv < 0) {
+        char errorMsg[MAX_MSG_LENGTH] = {0};
+        sprintf(errorMsg,"ERROR : recvfrom() error :\t%d\n",errno);
+        write(STDOUT_FILENO,errorMsg,strlen(errorMsg));
+        exit(EXIT_FAILURE);
+    }
+
+    write(STDOUT_FILENO,rcvBuffer,retRcv);
 }
 
 void checkSocket(int sock) {
