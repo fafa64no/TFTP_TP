@@ -1,12 +1,8 @@
 #pragma once
 
-#include <unistd.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 #include <fcntl.h>
 
-#include <errno.h>
+#include "utils.h"
 
 #define MAX_FILE_SIZE 65536
 #define MAX_MSG_LENGTH 1024

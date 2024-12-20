@@ -19,3 +19,6 @@
 #define OPCODE_DATA 3
 #define OPCODE_ACK 4
 #define OPCODE_ERROR 5
+
+void checkArgsGetTFTP(int argc);
+void checkArgsPutTFTP(int argc);

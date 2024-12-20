@@ -6,6 +6,7 @@ src/tftp_cfg.c
 
 src/request.c
 src/fileReader.c
+src/utils.c
 
 src/socket/socket.c
 src/socket/socketSend.c
@@ -17,6 +18,7 @@ src/tftp_cfg.c
 
 src/request.c
 src/fileReader.c
+src/utils.c
 
 src/socket/socket.c
 src/socket/socketSend.c

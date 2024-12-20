@@ -36,8 +36,8 @@ void writeSocket(int source, struct addrinfo* dest, char* sourceFilename, char* 
     sendRequest_WRQ(source, dest, destFilename);
     while(receiveACK(source, dest) != 0);
 
-    int packetAmount = 1 + sourceFileLength/MAX_PACKET_SIZE;
-    ssize_t lastPacketSize = sourceFileLength - (packetAmount - 1) * MAX_PACKET_SIZE;
+    int packetAmount = 1 + sourceFileLength/MAX_BLOCK_SIZE;
+    ssize_t lastPacketSize = sourceFileLength - (packetAmount - 1) * MAX_BLOCK_SIZE;
 
     {
         const char msg[] = "Sending data ...\n";
@@ -45,38 +45,11 @@ void writeSocket(int source, struct addrinfo* dest, char* sourceFilename, char* 
     }
 
     for (unsigned int i_packet = 1; i_packet <= packetAmount; i_packet++) {
-        ssize_t packetSize = (i_packet == packetAmount) ? lastPacketSize : MAX_PACKET_SIZE;
-        while(receiveACK_2(source, dest) != i_packet) {
-            sendData(&sourceFile[(i_packet - 1) * MAX_PACKET_SIZE], packetSize, source, dest, i_packet);
+        ssize_t packetSize = (i_packet == packetAmount) ? lastPacketSize : MAX_BLOCK_SIZE;
+        while(receiveACK(source, dest) != i_packet) {
+            sendData(&sourceFile[(i_packet - 1) * MAX_BLOCK_SIZE], packetSize, source, dest, i_packet);
         }
-        const char msg[] = "\tsending more data ...\n";
+        const char msg[] = "\t     ...\n";
         write(STDOUT_FILENO,msg,strlen(msg));
     }
-}
-
-int receiveACK_2(int source, struct addrinfo* dest) {
-    char packetReceived[MAX_PACKET_SIZE] = {0};
-    ssize_t packetReceivedSize;
-
-    receivePacket(&packetReceived[0], &packetReceivedSize, source, dest);
-    if(packetReceivedSize < 4) {
-        const char errorMsg[] = "ERROR : Too small ACK\n";
-        write(STDOUT_FILENO,errorMsg,strlen(errorMsg));
-        exit(EXIT_FAILURE);
-    }
-    int opcode = packetReceived[1] + 256 * packetReceived[0];
-
-    switch (opcode) {
-    case OPCODE_ERROR:
-        write(STDOUT_FILENO, packetReceived, packetReceivedSize);
-        exit(EXIT_FAILURE);
-    case OPCODE_ACK:
-        return packetReceived[3] + 256 * packetReceived[2];
-    default:
-        const char errorMsg[] = "ERROR : Unknown opcode\n";
-        write(STDOUT_FILENO,errorMsg,strlen(errorMsg));
-        exit(EXIT_FAILURE);
-    }
-
-    return -1;
 }
