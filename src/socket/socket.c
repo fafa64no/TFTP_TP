@@ -23,9 +23,7 @@ void readSocket(int source, struct addrinfo* dest,  char* filename) {
         if (retRcv != MAX_BLOCK_SIZE) break;
     }
 
-    write(STDOUT_FILENO,rcvBuffer,rcvBufferSize);
-    write(STDOUT_FILENO,"\n",strlen("\n"));
-
+    dispBuffer(rcvBuffer, rcvBufferSize);
     free(rcvBuffer);
 }
 

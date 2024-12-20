@@ -22,3 +22,8 @@
 
 void checkArgsGetTFTP(int argc);
 void checkArgsPutTFTP(int argc);
+
+void dispGoalGetTFTP(char** argv);
+void dispGoalPutTFTP(char** argv);
+
+void dispBuffer(char* buffer, ssize_t bufferSize);

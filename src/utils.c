@@ -15,3 +15,30 @@ void checkArgsPutTFTP(int argc) {
         exit(EXIT_FAILURE);
     }
 }
+
+void dispGoalGetTFTP(char** argv) {
+    char goalMsg[MAX_MSG_LENGTH] = {0};
+    sprintf(goalMsg,
+        "*** Reding %s from %s at port %s\n\n",
+        argv[2],
+        argv[1],
+        DEFAULT_PORT
+    );
+    write(STDOUT_FILENO,goalMsg,strlen(goalMsg));
+}
+
+void dispGoalPutTFTP(char** argv) {
+    char goalMsg[MAX_MSG_LENGTH] = {0};
+    sprintf(goalMsg,
+        "*** Writing %s at %s on %s at port %s\n\n",
+        argv[3],
+        argv[2],
+        argv[1],
+        DEFAULT_PORT
+    );
+    write(STDOUT_FILENO,goalMsg,strlen(goalMsg));
+}
+
+void dispBuffer(char* buffer, ssize_t bufferSize) {
+    write(STDOUT_FILENO,buffer,bufferSize);
+}
